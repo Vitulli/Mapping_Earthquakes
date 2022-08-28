@@ -25,8 +25,7 @@ let overlays = {
   Earthquakes: earthquakes
 };
 
-// Pass our map layers into our layers control and add the layers control to the map.
-L.control.layers(baseMaps, overlays).addTo(map);
+
 
 // Create the map object with a center and zoom level.
 let map = L.map("mapid", {
@@ -34,6 +33,9 @@ let map = L.map("mapid", {
   zoom: 3,
   layers: [streets]
 });
+
+// Pass our map layers into our layers control and add the layers control to the map.
+L.control.layers(baseMaps, overlays).addTo(map);
 
 // Retrieve the earthquake GeoJSON data.
 d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson").then(function(data) {
@@ -54,7 +56,9 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
             onEachFeature: function(feature, layer) {
                 layer.bindPopup("Magnitude: " + feature.properties.mag + "<br>Location: " + feature.properties.place);
                 }
-            }).addTo(map);
+            }).addTo(earthquakes);
+
+        earthquakes.addTo(map);
 
         function getRadius(magnitude) {
             if (magnitude === 0) {
@@ -94,7 +98,7 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
             };
         }
    
-}).addTo(map);
+});
 
 // Then we add our 'graymap' tile layer to the map.
 streets.addTo(map);
